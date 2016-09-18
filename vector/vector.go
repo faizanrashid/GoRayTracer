@@ -30,13 +30,25 @@ func New(args ...float64) *Vec3 {
 
 }
 
+func RandomInUnitDisk() *Vec3 {
+	p := New()
+	for {
+		p.e0, p.e1 = 2.0*rand.Float64(), 2.0*rand.Float64()
+		p.MinusEqualVector(New(1.0, 1.0, 0.0))
+		if p.Dot(p) <= 1.0 {
+			break
+		}
+	}
+	return p
+}
+
 func RandomInUnitSphere() *Vec3 {
 	p := New()
 	oneVector := New(1.0, 1.0, 1.0)
 	for {
 		p.e0, p.e1, p.e2 = 2.0*rand.Float64(), 2.0*rand.Float64(), 2.0*rand.Float64()
 		p.MinusEqualVector(oneVector)
-		if p.SquaredLength() >= 1.0 {
+		if p.SquaredLength() <= 1.0 {
 			break
 		}
 	}
@@ -129,6 +141,22 @@ func (v *Vec3) DivideScaler(t float64) *Vec3 {
 		e0: v.e0 / t,
 		e1: v.e1 / t,
 		e2: v.e2 / t,
+	}
+}
+
+func (v *Vec3) PlusScaler(t float64) *Vec3 {
+	return &Vec3{
+		e0: v.e0 + t,
+		e1: v.e1 + t,
+		e2: v.e2 + t,
+	}
+}
+
+func (v *Vec3) MinusScaler(t float64) *Vec3 {
+	return &Vec3{
+		e0: v.e0 - t,
+		e1: v.e1 - t,
+		e2: v.e2 - t,
 	}
 }
 

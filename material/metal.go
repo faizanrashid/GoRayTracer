@@ -6,8 +6,8 @@ import (
 )
 
 type Metal struct {
-	Albedo *vector.Vec3
-	Fuzz   float64
+	albedo *vector.Vec3
+	fuzz   float64
 }
 
 func NewMetal(albedo *vector.Vec3, fuzz float64) *Metal {
@@ -16,21 +16,17 @@ func NewMetal(albedo *vector.Vec3, fuzz float64) *Metal {
 	}
 
 	return &Metal{
-		Albedo: albedo,
-		Fuzz:   fuzz,
+		albedo: albedo,
+		fuzz:   fuzz,
 	}
 }
 
 func (m *Metal) Scatter(rayIn *ray.Ray, hitPoint *vector.Vec3, normal *vector.Vec3) (bool, *ScatterEffect) {
 	reflected := reflect(vector.UnitVector(rayIn.Direction()), normal)
-	scatteredRay := ray.New(hitPoint, reflected.PlusVector(vector.RandomInUnitSphere().MultiplyScaler(m.Fuzz)))
+	scatteredRay := ray.New(hitPoint, reflected.PlusVector(vector.RandomInUnitSphere().MultiplyScaler(m.fuzz)))
 	scatteredEffect := &ScatterEffect{
 		ScatteredRay: scatteredRay,
-		Attenuation:  m.Albedo,
+		Attenuation:  m.albedo,
 	}
 	return scatteredRay.Direction().Dot(normal) > 0, scatteredEffect
-}
-
-func reflect(v, normal *vector.Vec3) *vector.Vec3 {
-	return v.MinusVector(normal.MultiplyScaler(2 * v.Dot(normal)))
 }

@@ -14,6 +14,13 @@ func vectorEqual(v, w *Vec3) bool {
 	return (v.e0 == w.e0) && (v.e1 == w.e1) && (v.e2 == w.e2)
 }
 
+func TestRandomInUnitSphere(t *testing.T) {
+	p := RandomInUnitSphere()
+	if p.SquaredLength() >= 1.0 {
+		t.Errorf("Vectors squared length should be less than 1.")
+	}
+}
+
 func TestUnitVector(t *testing.T) {
 	v := &Vec3{1, 1, 1}
 	actual := UnitVector(v)

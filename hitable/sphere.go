@@ -22,10 +22,6 @@ func NewSphere(centre *vector.Vec3, radius float64, mat material.Material) *Sphe
 	}
 }
 
-func (s *Sphere) Material() material.Material {
-	return s.m
-}
-
 func (s *Sphere) Hit(r *ray.Ray, hitRecord *HitRecord, tMin, tMax float64) bool {
 	oc := r.Origin().MinusVector(s.Centre)
 	a := r.Direction().Dot(r.Direction())

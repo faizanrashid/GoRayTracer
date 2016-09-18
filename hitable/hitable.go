@@ -15,7 +15,6 @@ type HitRecord struct {
 
 type Hitable interface {
 	Hit(r *ray.Ray, hitRecord *HitRecord, tMin, tMax float64) bool
-	Material() material.Material
 }
 
 type HitableList struct {

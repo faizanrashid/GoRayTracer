@@ -6,12 +6,12 @@ import (
 )
 
 type Lambertian struct {
-	Albedo *vector.Vec3
+	albedo *vector.Vec3
 }
 
 func NewLambertian(albedo *vector.Vec3) *Lambertian {
 	return &Lambertian{
-		Albedo: albedo,
+		albedo: albedo,
 	}
 }
 
@@ -19,7 +19,7 @@ func (l *Lambertian) Scatter(rayIn *ray.Ray, hitPoint *vector.Vec3, normal *vect
 	target := hitPoint.PlusVector(normal).PlusVector(vector.RandomInUnitSphere())
 	scatterEffect := &ScatterEffect{
 		ScatteredRay: ray.New(hitPoint, target.MinusVector(hitPoint)),
-		Attenuation:  l.Albedo,
+		Attenuation:  l.albedo,
 	}
 	return true, scatterEffect
 }

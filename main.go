@@ -114,31 +114,38 @@ func main() {
 	nx, ny := 200, 100
 
 	// Number of rays per pixel (Anti Aliasing)
-	ns := 500
+	ns := 100
 
 	// Define camera.
-	cam := camera.New(vector.New(),
-		vector.New(-2.0, -1.0, -1.0),
-		vector.New(4.0, 0.0, 0.0),
-		vector.New(0.0, 2.0, 0.0))
+	lookFrom := vector.New(3, 3, 2)
+	lookAt := vector.New(0, 0, -1.0)
+	distToFocus := lookFrom.MinusVector(lookAt).Length()
+	cam := camera.New(
+		lookFrom,
+		lookAt,
+		vector.New(0, 1, 0),
+		20,
+		float64(nx)/float64(ny),
+		2.0,
+		distToFocus)
 
 	// Define the hitable objects.
 	world := &hitable.HitableList{}
 	world.Add(hitable.NewSphere(vector.New(0, 0, -1),
 		0.5,
-		material.NewLambertian(vector.New(0.8, 0.3, 0.3))))
-	world.Add(hitable.NewSphere(
-		vector.New(0, -100.5, -1),
-		100.0,
+		material.NewLambertian(vector.New(0., 0.2, 0.5))))
+	world.Add(hitable.NewSphere(vector.New(0, -100.5, -1),
+		100,
 		material.NewLambertian(vector.New(0.8, 0.8, 0.0))))
-	world.Add(hitable.NewSphere(
-		vector.New(1.0, 0.0, -1),
+	world.Add(hitable.NewSphere(vector.New(1, 0.0, -1),
 		0.5,
 		material.NewMetal(vector.New(0.8, 0.6, 0.2), 1.0)))
-	world.Add(hitable.NewSphere(
-		vector.New(-1, 0.0, -1),
+	world.Add(hitable.NewSphere(vector.New(-1, 0.0, -1),
 		0.5,
-		material.NewMetal(vector.New(0.8, 0.8, 0.8), 0.3)))
+		material.NewDielectric(1.5)))
+	world.Add(hitable.NewSphere(vector.New(-1, 0.0, -1),
+		-0.45,
+		material.NewDielectric(1.5)))
 
 	output := createOutput(world, cam, nx, ny, ns)
 	writeToFile("hello_world.ppm", []byte(output))
